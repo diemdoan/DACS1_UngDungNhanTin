@@ -1,6 +1,13 @@
 package DACS1_UngDungNhanTin;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javax.swing.*;
 
 public class Signup {
@@ -30,7 +37,7 @@ public class Signup {
 		JLabel backgroundLabel = new JLabel(backgroundImage);
 		backgroundLabel.setBounds(0, 0, frame.getWidth(), frame.getHeight());
 		frame.setContentPane(backgroundLabel);
-		
+
 		JLabel lblNewLabel = new JLabel("Đăng kí tài khoản mới");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 40));
 		lblNewLabel.setBounds(182, 10, 455, 66);
@@ -60,31 +67,117 @@ public class Signup {
 		textField.setBounds(324, 135, 338, 33);
 		frame.getContentPane().add(textField);
 		textField.setColumns(10);
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 27));
 
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
 		textField_1.setBounds(324, 185, 338, 33);
 		frame.getContentPane().add(textField_1);
+		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 27));
 
 		textField_2 = new JTextField();
 		textField_2.setColumns(10);
 		textField_2.setBounds(324, 235, 338, 33);
 		frame.getContentPane().add(textField_2);
+		textField_2.setFont(new Font("Tahoma", Font.PLAIN, 27));
 
 		textField_3 = new JTextField();
 		textField_3.setColumns(10);
 		textField_3.setBounds(324, 283, 338, 33);
 		frame.getContentPane().add(textField_3);
+		textField_3.setFont(new Font("Tahoma", Font.PLAIN, 27));
 
 		JButton btnNewButton = new JButton("Đăng kí");
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 21));
 		btnNewButton.setBounds(307, 412, 170, 40);
 		frame.getContentPane().add(btnNewButton);
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String id = textField.getText();
+				String fullName = textField_1.getText();
+				String accName = textField_2.getText();
+				String pass = textField_3.getText();
 
+				if (fullName.isEmpty() || id.isEmpty() || accName.isEmpty() || pass.isEmpty()) {
+					JOptionPane.showMessageDialog(frame, "Vui lòng điền đầy đủ thông tin!");
+					return;
+				}
+
+				try {
+					Integer.parseInt(id);
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(frame, "ID phải là số!");
+					return;
+				}
+
+				try {
+					Connection conn = Database.getConnection();
+					String checkDuplicateSql = "SELECT id FROM account WHERE id = ?";
+					PreparedStatement checkStatement = conn.prepareStatement(checkDuplicateSql);
+					checkStatement.setString(1, id);
+					ResultSet resultSet = checkStatement.executeQuery();
+					if (resultSet.next()) {
+						JOptionPane.showMessageDialog(frame, "ID đã được sử dụng!");
+						checkStatement.close();
+						conn.close();
+						return;
+					}
+					checkStatement.close();
+					conn.close();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+					return;
+				}
+
+				try {
+					Connection conn = Database.getConnection();
+					String checkDuplicateSql = "SELECT accName FROM account WHERE accName = ?";
+					PreparedStatement checkStatement = conn.prepareStatement(checkDuplicateSql);
+					checkStatement.setString(1, accName);
+					ResultSet resultSet = checkStatement.executeQuery();
+					if (resultSet.next()) {
+						JOptionPane.showMessageDialog(frame, "Tên tài khoản đã được sử dụng!");
+						checkStatement.close();
+						conn.close();
+						return;
+					}
+					checkStatement.close();
+					conn.close();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+					return;
+				}
+
+				try {
+					Connection conn = Database.getConnection();
+					String sql = "INSERT INTO account (id, fullName, accName, pass) VALUES (?, ?, ?, ?)";
+					PreparedStatement statement = conn.prepareStatement(sql);
+					statement.setString(1, id);
+					statement.setString(2, fullName);
+					statement.setString(3, accName);
+					statement.setString(4, pass);
+					statement.executeUpdate();
+
+					statement.close();
+					conn.close();
+					JOptionPane.showMessageDialog(frame, "Đăng ký thành công!");
+					new Login();
+					frame.dispose();
+				} catch (SQLException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
 		JButton btnThot = new JButton("Thoát");
 		btnThot.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnThot.setBounds(10, 13, 101, 33);
 		frame.getContentPane().add(btnThot);
+		btnThot.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.dispose();
+				new Login();
+			}
+		});
 	}
 
 }
