@@ -3,15 +3,27 @@ package DACS1_UngDungNhanTin;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.net.Socket;
 import javax.swing.*;
+
+import java.io.*;
 
 public class Login {
 
 	private JFrame lFrame;
 	private JTextField textField;
 	private JPasswordField textField_pass;
-	private int userID;
+
+	private String host = "localhost";
+	private int port = 9999;
+	private Socket socket;
+
+	private DataInputStream dis;
+	private DataOutputStream dos;
+
+	private String username;
 
 	public static void main(String[] args) {
 		Login window = new Login();
@@ -63,50 +75,51 @@ public class Login {
 		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 29));
 		btnNewButton.setBounds(389, 325, 188, 45);
 		lFrame.getContentPane().add(btnNewButton);
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String username = textField.getText();
-				String password = new String(textField_pass.getPassword());
 
-				if (username.isEmpty() || password.isEmpty()) {
-					JOptionPane.showMessageDialog(lFrame, "Vui lòng điền đầy đủ thông tin!");
-				} else {
-					try {
-						Connection connection = Database.getConnection();
-
-						String sql = "SELECT * FROM account WHERE accName = ? AND pass = ?";
-						PreparedStatement statement = connection.prepareStatement(sql);
-						statement.setString(1, username);
-						statement.setString(2, password);
-
-						ResultSet resultSet = statement.executeQuery();
-
-						if (resultSet.next()) {
-							userID = resultSet.getInt("id");
-							showChat();
-							lFrame.dispose();
-						} else {
-							JOptionPane.showMessageDialog(lFrame, "Thông tin đăng nhập không chính xác!");
-						}
-
-						resultSet.close();
-						statement.close();
-						connection.close();
-					} catch (SQLException ex) {
-						ex.printStackTrace();
-					}
-				}
-			}
-		});
+		JLabel notification = new JLabel("");
+		notification.setForeground(Color.RED);
+		notification.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		notification.setBounds(621, 374, 333, 45);
+		lFrame.getContentPane().add(notification);
 
 		JButton btnngK = new JButton("Đăng kí ");
 		btnngK.setFont(new Font("Tahoma", Font.PLAIN, 29));
 		btnngK.setBounds(508, 448, 162, 48);
 		lFrame.getContentPane().add(btnngK);
+
+		btnNewButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				String response = Login(textField.getText(), String.copyValueOf(textField_pass.getPassword()));
+
+				
+				if (response.equals("Log in successful")) {
+					username = textField.getText();
+					EventQueue.invokeLater(new Runnable() {
+						public void run() {
+							try {
+								Chat frame = new Chat(username, dis, dos);
+
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					});
+					lFrame.dispose();
+				} else {
+					btnNewButton.setEnabled(false);
+					btnngK.setEnabled(false);
+					textField_pass.setText("");
+					notification.setText(response);
+				}
+			}
+		});
+		btnNewButton.setEnabled(false);
+
 		btnngK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lFrame.dispose();
-				new Signup();
+				Signup frame = new Signup();
 			}
 		});
 
@@ -124,10 +137,64 @@ public class Login {
 				lFrame.dispose();
 			}
 		});
+
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (textField.getText().isBlank() || String.copyValueOf(textField_pass.getPassword()).isBlank()) {
+					btnNewButton.setEnabled(false);
+				} else {
+					btnNewButton.setEnabled(true);
+				}
+			}
+		});
+
+		textField_pass.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (textField.getText().isBlank() || String.copyValueOf(textField_pass.getPassword()).isBlank()) {
+					btnNewButton.setEnabled(false);
+				} else {
+					btnNewButton.setEnabled(true);
+				}
+			}
+		});
+
 	}
 
-	private void showChat() {
-		Chat newChat = new Chat(userID);
-		newChat.frame.setVisible(true);
+	public String Login(String username, String password) {
+		try {
+			Connect();
+
+			dos.writeUTF("Log in");
+			dos.writeUTF(username);
+			dos.writeUTF(password);
+			dos.flush();
+
+			String response = dis.readUTF();
+			return response;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "Network error: Log in fail";
+		}
 	}
+
+	public void Connect() {
+		try {
+			if (socket != null) {
+				socket.close();
+			}
+			socket = new Socket(host, port);
+			this.dis = new DataInputStream(socket.getInputStream());
+			this.dos = new DataOutputStream(socket.getOutputStream());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public String getUsername() {
+		return this.username;
+	}
+
 }
