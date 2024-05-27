@@ -12,22 +12,7 @@ public class ChatServer {
 	private Socket socket;
 	static ArrayList<Handler> clients = new ArrayList<Handler>();
 
-	private void insertAccount(String id, String fullName, String username, String password) {
-		try {
-			Connection conn = Database.getConnection();
-			PreparedStatement stmt = conn
-					.prepareStatement("INSERT INTO account (id, fullName, accName, pass) VALUES (?, ?, ?, ?)");
-			stmt.setString(1, id);
-			stmt.setString(2, fullName);
-			stmt.setString(3, username);
-			stmt.setString(4, password);
-			stmt.executeUpdate();
-			stmt.close();
-			conn.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	public ChatServer() throws IOException {
 		try {
@@ -44,27 +29,7 @@ public class ChatServer {
 
 				String request = dis.readUTF();
 
-				if (request.equals("Sign up")) {
-					String id = dis.readUTF();
-					String fullName = dis.readUTF();
-					String username = dis.readUTF();
-					String password = dis.readUTF();
-
-					if (!isExisted(username)) {
-						insertAccount(id, fullName, username, password);
-						Handler newHandler = new Handler(socket, username, password, true, lock);
-						clients.add(newHandler);
-						dos.writeUTF("Sign up successful");
-						dos.flush();
-						Thread t = new Thread(newHandler);
-						t.start();
-						updateOnlineUsers();
-					} else {
-						dos.writeUTF("This username is being used");
-						dos.flush();
-					}
-
-				} else if (request.equals("Log in")) {
+				if (request.equals("Log in")) {
 					String username = dis.readUTF();
 					String password = dis.readUTF();
 

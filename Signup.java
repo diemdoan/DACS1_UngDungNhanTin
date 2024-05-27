@@ -18,13 +18,6 @@ public class Signup {
 	private JTextField textField_2;
 	private JTextField textField_3;
 
-	private String host = "localhost";
-	private int port = 9999;
-	private Socket socket;
-
-	private DataInputStream dis;
-	private DataOutputStream dos;
-
 	public static void main(String[] args) {
 		Signup window = new Signup();
 		window.frame.setVisible(true);
@@ -153,27 +146,18 @@ public class Signup {
 					return;
 				}
 
-				String response = Signup(id, fullName, accName, pass);
-				if (response.equals("Sign up successful")) {
-					EventQueue.invokeLater(new Runnable() {
-						public void run() {
-							try {
-								int confirm = JOptionPane.showConfirmDialog(null, "Đăng kí tài khoản mới thành công!",
-										"Sign up successful", JOptionPane.DEFAULT_OPTION);
-								Login lFrame = new Login();
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					});
-					frame.dispose();
+				insertAccount(id, fullName, accName, pass);
 
-				} else {
-					btnNewButton.setEnabled(false);
-				}
+				JOptionPane.showMessageDialog(frame, "Đăng kí tài khoản mới thành công!");
+
+				Login lFrame = new Login();
+
+				frame.dispose();
+
 			}
 
 		});
+
 		JButton btnThot = new JButton("Thoát");
 		btnThot.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnThot.setBounds(10, 13, 101, 33);
@@ -183,42 +167,24 @@ public class Signup {
 				frame.dispose();
 				new Login();
 			}
+
 		});
 	}
 
-	public String Signup(String id, String fullName, String username, String password) {
+	private void insertAccount(String id, String fullName, String username, String password) {
 		try {
-			Connect();
-
-			dos.writeUTF("Sign up");
-			dos.writeUTF(id);
-			dos.writeUTF(fullName);
-			dos.writeUTF(username);
-			dos.writeUTF(password);
-			dos.flush();
-
-			String response = dis.readUTF();
-			return response;
-
-		} catch (IOException e) {
+			Connection conn = Database.getConnection();
+			PreparedStatement stmt = conn
+					.prepareStatement("INSERT INTO account (id, fullName, accName, pass) VALUES (?, ?, ?, ?)");
+			stmt.setString(1, id);
+			stmt.setString(2, fullName);
+			stmt.setString(3, username);
+			stmt.setString(4, password);
+			stmt.executeUpdate();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e) {
 			e.printStackTrace();
-			return "Network error: Sign up fail";
-		}
-	}
-
-	/**
-	 * Kết nối đến server
-	 */
-	public void Connect() {
-		try {
-			if (socket != null) {
-				socket.close();
-			}
-			socket = new Socket(host, port);
-			this.dis = new DataInputStream(socket.getInputStream());
-			this.dos = new DataOutputStream(socket.getOutputStream());
-		} catch (IOException ex) {
-			ex.printStackTrace();
 		}
 	}
 

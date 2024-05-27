@@ -554,7 +554,7 @@ public class Chat extends JFrame {
 
 							onlineUsers.setSelectedItem(" ");
 							JOptionPane.showMessageDialog(null,
-									chatting + " is offline!\nYou will be redirect to default chat window");
+									chatting + " đã đăng xuất!\nThoát khỏi cuộc trò chuyện");
 						} else {
 							onlineUsers.setSelectedItem(chatting);
 						}
