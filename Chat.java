@@ -250,11 +250,13 @@ public class Chat extends JFrame {
 		txtMessage.setFont(new Font("Tahoma", Font.PLAIN, 27));
 		txtMessage.setColumns(1);
 
-		btnSend = new JButton("Send");
-		btnSend.setFont(new Font("Tahoma", Font.BOLD, 27));
+		ImageIcon sendIcon = new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/component/send.png"));
+		Image scaledImage1 = sendIcon.getImage().getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+		ImageIcon scaledIcon1 = new ImageIcon(scaledImage1);
+		btnSend = new JButton("", scaledIcon1);
+		btnSend.setEnabled(false);
 		btnSend.setBounds(841, 514, 150, 50);
 		frame.getContentPane().add(btnSend);
-		btnSend.setEnabled(false);
 
 		chatPanel = new JScrollPane();
 		chatPanel.setBounds(191, 109, 810, 376);
@@ -262,8 +264,8 @@ public class Chat extends JFrame {
 		chatPanel.setOpaque(false);
 		chatPanel.getViewport().setOpaque(false);
 
-		btnFile = new JButton("f");
-		btnFile.setFont(new Font("Tahoma", Font.BOLD, 27));
+		ImageIcon attIcon = new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/component/attach.png"));
+		btnFile = new JButton("", attIcon);
 		btnFile.setBounds(759, 514, 71, 50);
 		frame.getContentPane().add(btnFile);
 		btnFile.addActionListener(new ActionListener() {
@@ -305,10 +307,6 @@ public class Chat extends JFrame {
 		});
 		btnFile.setEnabled(false);
 
-		
-		
-
-		
 		JLabel lblNewLabel_3 = new JLabel();
 		lblNewLabel_3.setBounds(60, 110, 79, 79);
 		frame.getContentPane().add(lblNewLabel_3);
@@ -328,6 +326,47 @@ public class Chat extends JFrame {
 		frame.getContentPane().add(onlineUsers);
 		onlineUsers.setBounds(13, 329, 171, 27);
 
+		JPanel emojis = new JPanel();
+		emojis.setBounds(297, 485, 569, 28);
+		frame.getContentPane().add(emojis);
+
+		JLabel smileIcon = new JLabel(new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/mad.png")));
+		smileIcon.addMouseListener(new IconListener(smileIcon.getIcon().toString()));
+		emojis.add(smileIcon);
+
+		JLabel bigSmileIcon = new JLabel(
+				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/big-smile.png")));
+		bigSmileIcon.addMouseListener(new IconListener(bigSmileIcon.getIcon().toString()));
+		emojis.add(bigSmileIcon);
+
+		JLabel happyIcon = new JLabel(new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/sad.png")));
+		happyIcon.addMouseListener(new IconListener(happyIcon.getIcon().toString()));
+		emojis.add(happyIcon);
+
+		JLabel loveIcon = new JLabel(new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/love.png")));
+		loveIcon.addMouseListener(new IconListener(loveIcon.getIcon().toString()));
+		emojis.add(loveIcon);
+
+		JLabel suspiciousIcon = new JLabel(
+				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/suspicious.png")));
+		suspiciousIcon.addMouseListener(new IconListener(suspiciousIcon.getIcon().toString()));
+		emojis.add(suspiciousIcon);
+
+		JLabel vietIcon = new JLabel(
+				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/vietnam.png")));
+		vietIcon.addMouseListener(new IconListener(vietIcon.getIcon().toString()));
+		emojis.add(vietIcon);
+
+		JLabel italyIcon = new JLabel(
+				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/italy.png")));
+		italyIcon.addMouseListener(new IconListener(italyIcon.getIcon().toString()));
+		emojis.add(italyIcon);
+
+		JLabel ukIcon = new JLabel(new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/uk.png")));
+		ukIcon.addMouseListener(new IconListener(ukIcon.getIcon().toString()));
+		emojis.add(ukIcon);
+
+		
 		onlineUsers.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -453,29 +492,8 @@ public class Chat extends JFrame {
 				}
 			}
 		});
-//		JPanel emojis = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//		emojis.setBounds(191, 500, 555, 37);
-//		emojis.setBackground(new Color(230, 240, 247));
-//		JLabel smileIcon = new JLabel(
-//				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/mad.png")));
-//		smileIcon.addMouseListener(new IconListener(smileIcon.getIcon().toString()));
-//		emojis.add(smileIcon);
-//
-//		JLabel bigSmileIcon = new JLabel(
-//				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/big-smile.png")));
-//		bigSmileIcon.addMouseListener(new IconListener(bigSmileIcon.getIcon().toString()));
-//		emojis.add(bigSmileIcon);
-//
-//		JLabel happyIcon = new JLabel(
-//				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/emoji/sad.png")));
-//		happyIcon.addMouseListener(new IconListener(happyIcon.getIcon().toString()));
-//		emojis.add(happyIcon);
-//
-//		JLabel loveIcon = new JLabel(
-//				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/love.png")));
-//		loveIcon.addMouseListener(new IconListener(loveIcon.getIcon().toString()));
-//		emojis.add(loveIcon);
 
+		
 	}
 
 	class Receiver implements Runnable {
