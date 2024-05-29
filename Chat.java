@@ -17,6 +17,7 @@ public class Chat extends JFrame {
 	JFrame frame;
 
 	JComboBox<String> onlineUsers = new JComboBox<String>();
+	JComboBox<String> comboBox = new JComboBox<String>();
 
 	private String username;
 	private DataInputStream dis;
@@ -366,7 +367,6 @@ public class Chat extends JFrame {
 		ukIcon.addMouseListener(new IconListener(ukIcon.getIcon().toString()));
 		emojis.add(ukIcon);
 
-		
 		onlineUsers.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -493,7 +493,47 @@ public class Chat extends JFrame {
 			}
 		});
 
+		JLabel lblNewLabel_2 = new JLabel("Chọn background");
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblNewLabel_2.setBounds(743, 29, 139, 21);
+		frame.getContentPane().add(lblNewLabel_2);
+
 		
+		comboBox.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		comboBox.setBounds(884, 29, 107, 21);
+		frame.getContentPane().add(comboBox);
+		comboBox.addItem("Đỏ");
+		comboBox.addItem("Lục");
+		comboBox.addItem("Tím");
+		comboBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					String selectedItem = (String) comboBox.getSelectedItem();
+					switch (selectedItem) {
+					case "Tím":
+						ImageIcon backgroundImage3 = new ImageIcon(
+								getClass().getResource("/DACS1_UngDungNhanTin/Img/nt.jpg"));
+						backgroundLabel.setIcon(backgroundImage3);
+						break;
+					case "Đỏ":
+						ImageIcon backgroundImage1 = new ImageIcon(
+								getClass().getResource("/DACS1_UngDungNhanTin/Img/redbg.jpg"));
+						backgroundLabel.setIcon(backgroundImage1);
+						break;
+					case "Lục":
+						ImageIcon backgroundImage2 = new ImageIcon(
+								getClass().getResource("/DACS1_UngDungNhanTin/Img/green.jpg"));
+						backgroundLabel.setIcon(backgroundImage2);
+						break;
+
+					}
+					// Cập nhật lại hình nền
+					frame.getContentPane().repaint();
+				}
+			}
+		});
+
 	}
 
 	class Receiver implements Runnable {
