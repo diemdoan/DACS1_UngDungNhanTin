@@ -331,39 +331,38 @@ public class Chat extends JFrame {
 		emojis.setBounds(297, 485, 569, 28);
 		frame.getContentPane().add(emojis);
 
-		JLabel smileIcon = new JLabel(new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/mad.png")));
+		JLabel smileIcon = new JLabel(new ImageIcon("D:\\eclipse_workspace\\projecttesst\\src\\DACS1_UngDungNhanTin\\Img\\emoji\\mad.png"));
 		smileIcon.addMouseListener(new IconListener(smileIcon.getIcon().toString()));
 		emojis.add(smileIcon);
 
 		JLabel bigSmileIcon = new JLabel(
-				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/big-smile.png")));
+				new ImageIcon("D:\\eclipse_workspace\\projecttesst\\src\\DACS1_UngDungNhanTin\\Img\\emoji\\big-smile.png"));
 		bigSmileIcon.addMouseListener(new IconListener(bigSmileIcon.getIcon().toString()));
 		emojis.add(bigSmileIcon);
 
-		JLabel happyIcon = new JLabel(new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/sad.png")));
+		JLabel happyIcon = new JLabel(new ImageIcon("D:\\eclipse_workspace\\projecttesst\\src\\DACS1_UngDungNhanTin\\Img\\emoji\\sad.png"));
 		happyIcon.addMouseListener(new IconListener(happyIcon.getIcon().toString()));
 		emojis.add(happyIcon);
 
-		JLabel loveIcon = new JLabel(new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/love.png")));
+		JLabel loveIcon = new JLabel(new ImageIcon("D:\\eclipse_workspace\\projecttesst\\src\\DACS1_UngDungNhanTin\\Img\\emoji\\love.png"));
 		loveIcon.addMouseListener(new IconListener(loveIcon.getIcon().toString()));
 		emojis.add(loveIcon);
 
 		JLabel suspiciousIcon = new JLabel(
-				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/suspicious.png")));
+				new ImageIcon("D:\\eclipse_workspace\\projecttesst\\src\\DACS1_UngDungNhanTin\\Img\\emoji\\suspicious.png"));
 		suspiciousIcon.addMouseListener(new IconListener(suspiciousIcon.getIcon().toString()));
 		emojis.add(suspiciousIcon);
 
-		JLabel vietIcon = new JLabel(
-				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/vietnam.png")));
-		vietIcon.addMouseListener(new IconListener(vietIcon.getIcon().toString()));
-		emojis.add(vietIcon);
+		JLabel vietnamIcon = new JLabel(new ImageIcon("D:\\eclipse_workspace\\projecttesst\\src\\DACS1_UngDungNhanTin\\Img\\emoji\\vietnam.png"));
+		vietnamIcon.addMouseListener(new IconListener(vietnamIcon.getIcon().toString()));
+		emojis.add(vietnamIcon);
 
 		JLabel italyIcon = new JLabel(
-				new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/italy.png")));
+				new ImageIcon("D:\\eclipse_workspace\\projecttesst\\src\\DACS1_UngDungNhanTin\\Img\\emoji\\italy.png"));
 		italyIcon.addMouseListener(new IconListener(italyIcon.getIcon().toString()));
 		emojis.add(italyIcon);
 
-		JLabel ukIcon = new JLabel(new ImageIcon(getClass().getResource("/DACS1_UngDungNhanTin/Img/emoji/uk.png")));
+		JLabel ukIcon = new JLabel(new ImageIcon("D:\\eclipse_workspace\\projecttesst\\src\\DACS1_UngDungNhanTin\\Img\\emoji\\uk.png"));
 		ukIcon.addMouseListener(new IconListener(ukIcon.getIcon().toString()));
 		emojis.add(ukIcon);
 
@@ -697,7 +696,7 @@ public class Chat extends JFrame {
 		public IconListener(String emoji) {
 			this.emoji = emoji;
 		}
-
+		
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if (txtMessage.isEnabled() == true) {
