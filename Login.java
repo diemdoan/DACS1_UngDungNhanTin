@@ -108,7 +108,6 @@ public class Login {
 					lFrame.dispose();
 				} else {
 					btnNewButton.setEnabled(false);
-					btnngK.setEnabled(false);
 					textField_pass.setText("");
 					notification.setText(response);
 				}
